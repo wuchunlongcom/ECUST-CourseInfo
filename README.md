@@ -9,9 +9,7 @@ $ source  /Users/wuchunlong/local/env375/bin/activate
 快速 进入工程目录(/Users/wuchunlong/local/github/ECUST-CourseInfo)
 $ cd /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo
 运行
-
 (env375) wuchunlongdeMacBook-Pro:ECUST-CourseInfo wuchunlong$ pip install -r requirements.txt
-
 (env375) wuchunlongdeMacBook-Pro:courseinfo wuchunlong$ ./start.sh
 ##############################################################################
 
