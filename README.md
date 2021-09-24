@@ -1,4 +1,4 @@
-##############################################################################
+```
 
 华东理工大学课程信息表    春龙 文相 刘思野 
 
@@ -11,7 +11,7 @@ $ cd /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo
 运行
 (env375) wuchunlongdeMacBook-Pro:ECUST-CourseInfo wuchunlong$ pip install -r requirements.txt
 (env375) wuchunlongdeMacBook-Pro:courseinfo wuchunlong$ ./start.sh
-##############################################################################
+```
 
 
 
