@@ -3,7 +3,7 @@
 import os
 import django
 import datetime
-from data.syncdb import syncdb, readWorkbook
+from data.sync_db import syncdb, readWorkbook
 
 BASE_DIR = os.path.dirname(__file__)
 

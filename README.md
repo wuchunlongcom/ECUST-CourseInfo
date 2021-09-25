@@ -223,4 +223,8 @@ def _getDateInfo(date):
 否则下列两个函数出错！
 def classroomInfo(request, campus, building):   
 def classroomDetails(request, campus, building, classroom):
+
+为什么将  ../data/syncdb.py 更名为   sync_db.py ？
+因为syncdb.py文件名不能上传到git,不知是什么原因？
+2021.09.25
 ```
