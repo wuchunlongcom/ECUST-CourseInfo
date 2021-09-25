@@ -1,5 +1,0 @@
-- hosts: webserver
-  become: yes
-  roles:
-    - init01_pre_install
-    - init04_mount_bastion_data
