@@ -30,7 +30,7 @@ class ClassroomType(models.Model):
 
 
 class Classroom(models.Model):
-    id = models.CharField(verbose_name='教室ID', max_length=16, primary_key=True, blank=True)
+    id = models.CharField(verbose_name='教室ID', max_length=128, primary_key=True, blank=True) #16
     building = models.ForeignKey(Building, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='教室名称', max_length=16, null=True, blank=True)
     classroomType = models.ForeignKey(ClassroomType, on_delete=models.CASCADE)
@@ -60,8 +60,8 @@ class Term(models.Model):
 
 
 class Course(models.Model):
-    id = models.IntegerField(primary_key=True, auto_created=True)
-    courseid = models.CharField(verbose_name='课程ID', max_length=32, null=True, blank=True)
+    #id = models.IntegerField(primary_key=True, auto_created=True)
+    courseid = models.CharField(verbose_name='课程ID', max_length=128, null=True, blank=True) #32
     name = models.CharField(verbose_name='课程名称', max_length=256, null=True, blank=True)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     term = models.ForeignKey(Term, on_delete=models.CASCADE)

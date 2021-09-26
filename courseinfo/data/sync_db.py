@@ -42,7 +42,7 @@ def syncdb(classrooms, schedules):
     django.setup()
     from django.contrib.auth.models import User, Group, Permission
     if not User.objects.filter(username='admin'):
-        user = User.objects.create_superuser('admin', 'admin@test.com', '56e1E@ab1234')
+        user = User.objects.create_superuser('admin', 'admin@test.com', 'admin')
         user.save()
 
     from classroom.models import Campus, Building, ClassroomType, Classroom, Teacher, Term, Course

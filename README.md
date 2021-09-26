@@ -1,7 +1,6 @@
+### 华东理工大学课程信息表(修改了一些错误)    春龙 文相 刘思野 
+
 ```
-
-华东理工大学课程信息表    春龙 文相 刘思野 
-
 打开终端 --> 点击右边的【终端】；再打开终端 -->【commmond】【T】
 
 快速 进入py375  
@@ -204,11 +203,11 @@ $ cd /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo
 
 1. 执行完毕后，可以通过浏览器访问远程机器
 
-### 来源文相： https://github.com/wu-wenxiang/Project-ECUST-CourseInfo
+### 来源文相 https://github.com/wu-wenxiang/Project-ECUST-CourseInfo
 
-
-### 修改了下列函数。add 
+### 修改了源码 
 ```  
+1、将 raise Http404("Term does not exist")  改为 return '','',''
 def _getDateInfo(date):      
     terms = [i for i in Term.objects.all() if i.start <= date <= i.end]    
     if not terms:
@@ -224,7 +223,12 @@ def _getDateInfo(date):
 def classroomInfo(request, campus, building):   
 def classroomDetails(request, campus, building, classroom):
 
-为什么将  ../data/syncdb.py 更名为   sync_db.py ？
+2、为什么将  ../data/syncdb.py 更名为   sync_db.py ？
 因为syncdb.py文件名不能上传到git,不知是什么原因？
-2021.09.25
+
+3、excel字段实际长度>16,导致写入数据时出错。故改为128
+class Classroom(models.Model):
+    id = models.CharField(verbose_name='教室ID', max_length=128, primary_key=True, blank=True) #16
+
+2021.09.26
 ```
