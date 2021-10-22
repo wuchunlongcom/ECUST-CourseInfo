@@ -37,7 +37,7 @@ def buildingInfo(request, campus):
     baseUrl = '/classroominfo'
     buildings = Building.objects.filter(
         campus=campus,
-        campus__show_classroom=True,
+        campus__show_classroom=True,   # 一对多
         show_classroom=True
     ).values_list('name', flat=True)
     buildings = pinyinSort(buildings)
@@ -61,10 +61,10 @@ def classroomInfo(request, campus, building):
 
     classrooms = Classroom.objects.filter(
         building__campus=campus,
-        building__campus__show_classroom=True,
+        building__campus__show_classroom=True,  # 一对多
         building__name=building,
-        building__show_classroom=True,
-        classroomType__show_classroom=True,
+        building__show_classroom=True,  # 一对多
+        classroomType__show_classroom=True,  # 一对多
         show_classroom=True
     ).order_by("name")
 
@@ -79,14 +79,14 @@ def classroomInfo(request, campus, building):
         )
         # print(i, i.id, list(courses))
         courses = list(courses.filter(SJBZ=0)) + list(courses.filter(SJBZ=(week%2)))
-
         # print(i, [(j, j.KS, j.JS) for j in courses])
-        idles = [[j, True] for j in range(1, 13)]
+       
+        idles = [[j, True] for j in range(1, 13)] # idles = [[1, True], [2, True], [3, True], [4, True], [5, True], [6, True], [7, True], [8, True], [9, True], [10, True], [11, True], [12, True]]       
         for j in courses:
             for k in range(j.KS-1, j.JS):
                 idles[k] = [k+1, False]
         idles = [['%02d' % x, y] for (x,y) in idles]
-        idles = [idles[:4], idles[4:8], idles[8:]]
+        idles = [idles[:4], idles[4:8], idles[8:]] #  [[['01', True], ['02', True], ['03', True], ['04', True]], [['05', True], ['06', True], ['07', True], ['08', True]], [['09', True], ['10', True], ['11', True], ['12', True]]]
         classroomList.append((i, idles))
 
     return render(request, 'classroom/info-classroom.html', context=locals())

@@ -67,15 +67,12 @@ def syncdb(classrooms, schedules):
     items = [Building(campus=Campus.objects.get(name=k), name=v) for (k,v) in items]
     Building.objects.bulk_create(items, batch_size=20)
 
-    items = {i[0]:i for i in classrooms}
-    
+    items = {i[0]:i for i in classrooms} # {id:classrooms1,...}    classrooms1<=>classrooms第一条记录
     [i.delete() for i in Classroom.objects.all() if i.id not in items]
-    items = {i:items[i] for i in set(items)-set(Classroom.objects.all().values_list('id', flat=True))}   
-    
-    items = [(v, Campus.objects.get(name=v[4])) for (k,v) in items.items()]
-
-    items = [(i[0], Building.objects.get(campus=i[1], name=i[0][2])) for i in items] # 添加 Building
-    items = [(i[0], i[1], ClassroomType.objects.get(name=i[0][3])) for i in items] # 添加 ClassroomType
+    items = {i:items[i] for i in set(items)-set(Classroom.objects.all().values_list('id', flat=True))} # {id1:classrooms1,...}  set({'a':1,'b':2,'c':3})={'c', 'b', 'a'} set使序列发生了变化
+    items = [(v, Campus.objects.get(name=v[4])) for (k,v) in items.items()]  # [(v<=>classrooms1, campus1)...]
+    items = [(i[0], Building.objects.get(campus=i[1], name=i[0][2])) for i in items] # [(i[0]<=>classrooms1, building1),...]
+    items = [(i[0], i[1], ClassroomType.objects.get(name=i[0][3])) for i in items] # [(i[0]<=>classrooms1, building1, classroomType1),...]
     items = [Classroom(id=i[0][0], name=i[0][1], building=i[1], classroomType=i[2]) for i in items]
     Classroom.objects.bulk_create(items, batch_size=20)
 
