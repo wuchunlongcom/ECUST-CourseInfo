@@ -2,7 +2,7 @@
 
 ```
 打开终端 --> 点击右边的【终端】；再打开终端 -->【commmond】【T】
-
+特点：重新设置了路径 'data/db.sqlite3'
 快速 进入py375  
 $ source  /Users/wuchunlong/local/env375/bin/activate
 快速 进入工程目录(/Users/wuchunlong/local/github/ECUST-CourseInfo)
@@ -12,8 +12,6 @@ $ cd /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo
 (env375) wuchunlongdeMacBook-Pro:courseinfo wuchunlong$ ./start.sh
 ```
 
-
-
 # ECUST-CourseInfo
 
 ## 本地运行代码
@@ -22,7 +20,7 @@ $ cd /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo
 
 	```console
 	$ python --version
-	Python 3.7.3
+	Python 3.7.5
 	$ pip --version
 	pip 19.3.1 from /usr/local/lib/python3.7/site-packages/pip (python 3.7)
 	```
@@ -223,10 +221,7 @@ def _getDateInfo(date):
 def classroomInfo(request, campus, building):   
 def classroomDetails(request, campus, building, classroom):
 
-2、为什么将  ../data/syncdb.py 更名为   sync_db.py ？
-因为syncdb.py文件名不能上传到git,不知是什么原因？
-
-3、excel字段实际长度>16,导致写入数据时出错。故改为128
+2、excel字段实际长度>16,导致写入数据时出错。故改为128
 class Classroom(models.Model):
     id = models.CharField(verbose_name='教室ID', max_length=128, primary_key=True, blank=True) #16
 
