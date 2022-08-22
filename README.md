@@ -225,5 +225,7 @@ def classroomDetails(request, campus, building, classroom):
 class Classroom(models.Model):
     id = models.CharField(verbose_name='教室ID', max_length=128, primary_key=True, blank=True) #16
 
+3、本地运行出错 /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo ./start.sh  
+	增加/Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo/data/__init__.py
 2021.09.26
 ```
