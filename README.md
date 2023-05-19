@@ -227,5 +227,5 @@ class Classroom(models.Model):
 
 3、本地运行出错 /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo ./start.sh  
 	增加/Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo/data/__init__.py
-2021.09.26
+2023.05.19
 ```
