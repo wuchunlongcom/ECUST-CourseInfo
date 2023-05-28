@@ -1,0 +1,4 @@
+K [Gathering Facts] *********************************************************
+fatal: [course]: FAILED! => {"msg": "Missing sudo password"}
+postgres ALL=(ALL) NOPASSWD:ALL
+

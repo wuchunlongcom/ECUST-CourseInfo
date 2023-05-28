@@ -1,6 +1,6 @@
 ---
 
-container_name: "96c99daf55d546bea840400b0a488144"
+container_name: "49d94d26619fcae7589b5dd97376dbfd714662f043dfc3774c0a1de7721673dd"
 bastion_data_fstype: "xfs"
 bastion_data_path: "/bastion-data"
 ansible_ver: 2.7.11

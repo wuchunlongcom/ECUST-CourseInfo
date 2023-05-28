@@ -1,190 +1,229 @@
-### 华东理工大学课程信息表(修改了一些错误)    春龙 文相 刘思野 
+### 华东理工大学课程信息表 docker部署的远程机器(macOS建立的u20.04.3虚拟机)：wuchunlong@192.168.31.15  密码：83418341
 
 ```
-打开终端 --> 点击右边的【终端】；再打开终端 -->【commmond】【T】
-特点：重新设置了路径 'data/db.sqlite3'
 快速 进入py375  
 $ source  /Users/wuchunlong/local/env375/bin/activate
-快速 进入工程目录(/Users/wuchunlong/local/github/ECUST-CourseInfo)
-$ cd /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo
-运行
-(env375) wuchunlongdeMacBook-Pro:ECUST-CourseInfo wuchunlong$ pip install -r requirements.txt
-(env375) wuchunlongdeMacBook-Pro:courseinfo wuchunlong$ ./start.sh
+快速 切换到工程根目录
+$ cd /Users/wuchunlong/local/github/u20.04.3-fabric-dbtxt/u1604-fabric-dbtxt/ECUST-CourseInfo-src/src
+$ cd /Users/wuchunlong/local/github/u20.04.3-fabric-dbtxt/u1604-fabric-dbtxt/ECUST-CourseInfo-src/src/courseinfo
+
+特点：重新设置了路径 'data/db.sqlite3'
+
 ```
 
 # ECUST-CourseInfo
 
 ## 本地运行代码
 
-1. 切换到 Python3 环境，可以用虚拟环境 virtualenv，总之要确认 `python --version` 的输出是 `Python3` 字样
-
+1. 切换到Python3 虚拟环境 virtualenv
 	```console
-	$ python --version
-	Python 3.7.5
-	$ pip --version
-	pip 19.3.1 from /usr/local/lib/python3.7/site-packages/pip (python 3.7)
+	(env375) wuchunlong@wuchunlong courseinfo$ python --version
+		Python 3.7.5
+	^C(env375) wuchunlong@wuchunlong courseinfo$ pip --version
+		pip 23.1.2 from /Users/wuchunlong/local/env375/lib/python3.7/site-packages/pip (python 3.7)
 	```
-
-1. 切换回本项目的根目录，安装 pip 依赖
-
-	```console
+1. 切换到工程根目录，安装 pip 依赖 
+	```
+	cd /Users/wuchunlong/local/github/u20.04.3-fabric-dbtxt/u1604-fabric-dbtxt/ECUST-CourseInfo-src/src
 	$ ls
-	Dockerfile    README.md     ansible-u1804 courseinfo    docker-config  requirements.txt
-
+		Dockerfile    README.md     ansible-u1804 courseinfo    docker-config  requirements.txt
 	$ pip install -r requirements.txt
 	```
 
-1. 切换到 courseinfo 目录，初始化数据库
-
-	```console
+1. 切换到应用courseinfo目录
+	``` 
+	$ cd /Users/wuchunlong/local/github/u20.04.3-fabric-dbtxt/u1604-fabric-dbtxt/ECUST-CourseInfo-src/src/courseinfo
 	$ ls
-	README.md        courseinfo       excel            locale           myAPI            static
-	classroom        data             initdb.py        manage.py        templates        static_common
-	$ python manage.py migrate
-	$ python manage.py flush --noinput
-	$ python initdb.py
+		README.md     data          locale        start.sh
+		classroom     excel         manage.py     static_common
+		courseinfo    initdb.py     myAPI         templates
+
 	```
-
-1. 运行站点，浏览器访问：`http://127.0.0.1:8000/`
-
-	```console
-	$ python manage.py runserver
-	...
-	Starting development server at http://127.0.0.1:8000/
-	Quit the server with CONTROL-C.
+1. 运行站点
 	```
-
+	$ ./start.sh
+		...
+		System check identified no issues (0 silenced).
+		May 26, 2023 - 07:27:01
+		Django version 2.2.6, using settings 'courseinfo.settings-debug'
+		Starting development server at http://127.0.0.1:8000/
+		Quit the server with CONTROL-C.
+			
+	```
 ## 制作 Docker 镜像
 
-1. 确认本地 Docker Daemon 正常运行
+1. 确认本地 Docker Daemon 运行正常
 
 	```console
+	$ docker --version
+		Docker version 23.0.5, build bc4487a	
+	
 	$ docker run hello-world
-
-	Hello from Docker!
-	...
+		Hello from Docker!
+		This message shows that your installation appears to be working correctly.
+		...
+		
+	$ docker-compose --version
+		Docker Compose version v2.17.3
 	```
-
-1. 切换回本项目的根目录，确认目录中包含 Dockerfile 文件，**注意：`maodouzi/ecust-courseinfo:v1.0` 中的 maodouzi 是你 dockerhub 的账户名**
-
-	```console
+1. 切换到工程根目录，确认目录中包含 Dockerfile 文件，注意：`chunlongwu/djangodemo:v1.0` 中的 chunlongwu 是申请的 dockerhub 的账户名
+	```
 	$ ls
-	Dockerfile    README.md     ansible-u1804 courseinfo    docker-config  requirements.txt
-
-	$ docker build -t maodouzi/ecust-courseinfo:v1.0 .
-	Sending build context to Docker daemon  21.11MB
-	Step 1/20 : FROM maodouzi/django:v2.2.6
-	 ---> 0e1a814c3248
-	Step 2/20 : LABEL purpose='ECUST Course Search'
-	 ---> Using cache
-	 ---> bff5922c57b5
-	Step 3/20 : RUN mkdir -p /home/www/ecustCourseInfo/logs
-	 ---> Using cache
-	 ---> bffb926b0f6d
-	...
-	Step 20/20 : CMD [ "sh", "/tmp/start.sh" ]
-	 ---> Running in 25bedf25c059
-	Removing intermediate container 25bedf25c059
-	 ---> 52c793bdcd5a
-	Successfully built 52c793bdcd5a
-	Successfully tagged maodouzi/ecust-courseinfo:v1.0
+		Dockerfile    README.md     ansible-u1804 courseinfo    docker-config  requirements.txt
+    #制作Docker镜像 chunlongwu/djangodemo:v1.0 
+	(env375) wuchunlong@wuchunlong src$ docker build -t chunlongwu/djangodemo:v1.0 .
+		[+] Building 5.3s (18/18) FINISHED                                              
+ 		=> [internal] load .dockerignore                                          0.0s
+ 		=> => transferring context: 2B                                            0.0s
+ 		=> [internal] load build definition from Dockerfile                       0.0s
+ 		=> => transferring dockerfile: 1.71kB                                     0.0s
+ 		=> [internal] load metadata for docker.io/maodouzi/django:v2.2.6-oraclec  2.4s
+ 		=> [auth] maodouzi/django:pull token for registry-1.docker.io             0.0s
+ 		=> [internal] load build context                                          0.1s
+ 		=> => transferring context: 1.59MB                                        0.1s
+ 		=> [ 1/12] FROM docker.io/maodouzi/django:v2.2.6-oracleclient-v19.3@sha2  0.0s
+ 		=> CACHED [ 2/12] RUN mkdir -p /home/www/ecustCourseInfo/logs     && mkd  0.0s
+ 		=> CACHED [ 3/12] WORKDIR /home/www/ecustCourseInfo                       0.0s
+ 		=> [ 4/12] COPY courseinfo /home/www/ecustCourseInfo/src/courseinfo       0.1s
+ 		=> [ 5/12] COPY requirements.txt /home/www/ecustCourseInfo/src/courseinf  0.0s
+ 		=> [ 6/12] RUN rm -rf /home/www/ecustCourseInfo/src/courseinfo/initdb.py  1.9s
+ 		=> [ 7/12] RUN rm /etc/nginx/sites-enabled/default                        0.3s
+ 		=> [ 8/12] ADD docker-config/nginx.conf /etc/nginx/sites-available/ecust  0.0s 
+ 		=> [ 9/12] RUN ln -s /etc/nginx/sites-available/ecustCourseInfo.conf /et  0.3s 
+ 		=> [10/12] ADD docker-config/supervisord.conf /etc/supervisor/supervisor  0.0s 
+ 		=> [11/12] ADD docker-config/supervisor.conf /etc/supervisor/conf.d/ecus  0.0s 
+ 		=> [12/12] ADD docker-config/start.sh /tmp/start.sh                       0.0s 
+ 		=> exporting to image                                                     0.1s
+ 		=> => exporting layers                                                    0.1s
+ 		=> => writing image sha256:3517bf12b4081ab2109032ac256af7b6b6c08c95a4c9d  0.0s
+ 		=> => naming to docker.io/chunlongwu/djangodemo:v1.0                      0.0s
+	
 	```
+	
+1. 切换到 courseinfo 目录，在本地测试和运行 Docker 镜像，然后在浏览器上访问: `http://localhost 或 http://127.0.0.1/`
 
-1. 切换到 courseinfo 目录，在本地测试和运行 Docker 镜像，然后在浏览器上访问: `http://localhost`
-
-	```console
+	```
 	$ ls
 	README.md        courseinfo       excel            locale           myAPI            static
 	classroom        data             initdb.py        manage.py        static_common    templates
 
-	$ docker run -d -p 80:80 --mount type=bind,source=$(pwd)/data,target=/home/www/ecustCourseInfo/src/courseinfo/data maodouzi/ecust-courseinfo:v1.0
-	221fc877103e55b6a452e8d69838232e122a357972aa08ac4421212395b892bf
+	$ docker run -d -p 80:80 --mount type=bind,source=$(pwd)/courseinfo/data,target=/home/www/ecustCourseInfo/src/courseinfo/data chunlongwu/djangodemo:v1.0 
+		410dc2f7b7222e45a87449d0b9a079eafe9942c70a782256ad7f17a54d490994
+		
+		
+	$ docker ps
+		CONTAINER ID   IMAGE                        COMMAND              CREATED              STATUS              PORTS                NAMES
+		410dc2f7b722   chunlongwu/djangodemo:v1.0   "sh /tmp/start.sh"   About a minute ago   Up About a minute   0.0.0.0:80->80/tcp   hardcore_spence
 	```
 
 1. 停止 Docker 镜像
 
 	```console
-	docker stop 221fc877103e55b6a452e8d69838232e122a357972aa08ac4421212395b892bf
+	$ docker stop 410dc2f7b722
+		410dc2f7b722
 	```
 
 1. 镜像上传到 Docker hub
 
 	```bash
-	docker login
-	docker push maodouzi/ecust-courseinfo:v1.0
-	```
+	dockerHub       name: chunlongwu      password: 1234567890
+	$ docker login
+		Authenticating with existing credentials...
+		Login Succeeded
 
+		Logging in with your password grants your terminal complete access to your account. 
+		For better security, log in with a limited-privilege personal access token. Learn more at https://docs.docker.com/go/access-tokens/
+	
+	$ docker push chunlongwu/djangodemo:v1.0
+		The push refers to repository [docker.io/chunlongwu/djangodemo]
+		a1e8003d4cbb: Pushed 
+		...
+		831b66a484dc: Layer already exists 
+		v1.0: digest: sha256:3443356be4c9fa10f3f238dcdc3e8650b904e40a1c1c7f487bebda6e222c23e2 size: 4929
+	```
 ## 部署到远端站点
+1. 配置 ~/.ssh/config 文件，HostName 可以直接写 IP 地址，IdentityFile 是密钥文件，可以用 ssh-keygen 生成，然后通过 ssh-copy-id 拷贝到远端机器。
+    远端机器：ssh  wuchunlong@192.168.31.15
+	```
+	$ sudo vim ~/.ssh/config
 
-1. 配置 ~/.ssh/config 文件，HostName 可以直接写 IP 地址，IdentityFile 是密钥文件，可以用 ssh-keygen 生成，然后通过 ssh-copy-id 拷贝到远端机器上取。
+		Host course
+		HostName        192.168.31.15
+		User            wuchunlong
+		IdentityFile    ~/.ssh/id_rsa
+	```
 
 	```
-	Host course
-	    HostName        demo-course-search.trystack.cn
-	    User            root
-	    IdentityFile    ~/.ssh/id_rsa_test
-	```
-
-	```console
 	$ ssh-keygen
 	Generating public/private rsa key pair.
-	Enter file in which to save the key (/Users/wuwenxiang/.ssh/id_rsa): /Users/wuwenxiang/.ssh/id_rsa_test
-	Enter passphrase (empty for no passphrase):
-	Enter same passphrase again:
-	Your identification has been saved in /Users/wuwenxiang/.ssh/id_rsa_test.
-	Your public key has been saved in /Users/wuwenxiang/.ssh/id_rsa_test.pub.
+	Enter file in which to save the key (/Users/wuchunlong/.ssh/id_rsa): 
+	/Users/wuchunlong/.ssh/id_rsa already exists.
+	Overwrite (y/n)? y
+	Enter passphrase (empty for no passphrase): 
+	Enter same passphrase again: 
+	Your identification has been saved in /Users/wuchunlong/.ssh/id_rsa.
+	Your public key has been saved in /Users/wuchunlong/.ssh/id_rsa.pub.
 	The key fingerprint is:
-	SHA256:InvociMYhpxxK+FObSyvLYKDA5+GW3SYckqEHyrhbZY wuwenxiang@wuwenxiangdembp
+	SHA256:FY3WcT+NxFX5eRU2Eiv+2rswRZiZwWbXcRopZme/V4c wuchunlong@wuchunlong.local
 	The key's randomart image is:
-	+---[RSA 2048]----+
-	|                 |
-	|.                |
-	|o..              |
-	|o*.=.            |
-	|Bo&E+ . S        |
-	|*&o* + .         |
-	|O=*.o .          |
-	|O+Boo.           |
-	|o*o=..           |
+	+---[RSA 3072]----+
+	|          o=.=*BO|
+	|          o=%+OB=|
+	|         .+O.*o+*|
+	|         .. o E.B|
+	|        S  . .  =|
+	|            o  ..|
+	|           o .  .|
+	|            =    |
+	|           . +o  |
 	+----[SHA256]-----+
 
-	$ ssh-copy-id root@demo-course-search.trystack.cn -i ~/.ssh/id_rsa_test.pub
-	/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/wuwenxiang/.ssh/id_rsa_test.pub"
-	/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
-	/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
 
-	Number of key(s) added:        1
-
-	Now try logging into the machine, with:   "ssh 'root@demo-course-search.trystack.cn'"
-	and check to make sure that only the key(s) you wanted were added.
-	```
-
-1. 确认能不用用户名密码，直接访问远端机器
-
-	```console
+	$ ssh-copy-id wuchunlong@192.168.31.15 -i ~/.ssh/id_rsa.pub
+		wuchunlong@192.168.31.15's password: 83418341
+	#确认.  不用用户名密码，可以直接访问远端机器
 	$ ssh course
-	Welcome to Ubuntu 18.04.3 LTS (GNU/Linux 4.15.0-52-generic x86_64)
-	...
-	Last login: Wed Nov  6 18:47:17 2019 from 116.238.98.242
-	```
+		Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.15.0-72-generic x86_64)
 
-1. 切换到 ansible-u1804目录，复制 `inventory/inventory.ini.example`，并修改 webserver 的名字
+ 		* Documentation:  https://help.ubuntu.com
+ 		* Management:     https://landscape.canonical.com
+ 		* Support:        https://ubuntu.com/advantage
+
+		131 updates can be applied immediately.
+		To see these additional updates run: apt list --upgradable
+
+		New release '22.04.2 LTS' available.
+		Run 'do-release-upgrade' to upgrade to it.
+
+		Your Hardware Enablement Stack (HWE) is supported until April 2025.
+		Last login: Fri May 26 03:41:03 2023 from 192.168.31.14
+		wuchunlong@ubuntu:~$
+
+	```
+1. 切换到 ansible-u1804目录，修改 inventory/inventory.ini.example, 复制 `inventory/inventory.ini.example`
 
 	```console
 	$ ls
 	README.md inventory playbooks
 
-	$ cp inventory/inventory.ini.example inventory/inventory.ini
-
-	$ cat inventory/inventory.ini
+	$ sudo vim inventory/inventory.ini.example
 	[all:vars]
-	image_name="maodouzi/ecust-courseinfo:v1.0"
+	image_name="chunlongwu/djangodemo"
+	image_version="v1.0"
+	data_external_dir="/Users/wuchunlong/local/github/u20.04.3-fabric-dbtxt/u1604-fabric-dbtxt/ECUST-CourseInfo-src/src/courseinfo/data/"
+	data_hostpath="/root/data/"
+	data_containerpath="/home/www/ecustCourseInfo/src/courseinfo/data/"
+
+	bastion_data_device="/dev/vdb"
 
 	[webserver]
 	course
+	
+	$ cp inventory/inventory.ini.example inventory/inventory.ini
+
 	```
 
-1. 执行部署
+1. 执行部署() 
 
 	```console
 	$ ansible-playbook -i inventory/inventory.ini playbooks/deploy.yml
@@ -194,38 +233,32 @@ $ cd /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo
 	TASK [Gathering Facts] ***********************************************************************************************************
 	ok: [course]
 
-	TASK [init01_pre_install : apt-get update] ***************************************************************************************
+	TASK [init02_config_webserver : Container present] *****************************
+	changed: [course]
 
-	...
+	PLAY RECAP *********************************************************************
+	course                     : ok=19   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 	```
-
 1. 执行完毕后，可以通过浏览器访问远程机器
-
-### 来源文相 https://github.com/wu-wenxiang/Project-ECUST-CourseInfo
-
-### 修改了源码 
-```  
-1、将 raise Http404("Term does not exist")  改为 return '','',''
-def _getDateInfo(date):      
-    terms = [i for i in Term.objects.all() if i.start <= date <= i.end]    
-    if not terms:
-        return '','',''  # add 增加此语句
-        raise Http404("Term does not exist")    
-    term = terms[0]    
-    isocalendar = date.isocalendar()
-    week = (date - term.firstMonday).days // 7 + 1
-    weekday = isocalendar[2]
-    #print(date, "-->", term.name, week, weekday) #2020-10-08 --> 2020-2021-1 6 4  (2020/10/8 -- 第 6 周 -- 星期 4 
-    return term.name, week, weekday
-否则下列两个函数出错！
-def classroomInfo(request, campus, building):   
-def classroomDetails(request, campus, building, classroom):
-
-2、excel字段实际长度>16,导致写入数据时出错。故改为128
-class Classroom(models.Model):
-    id = models.CharField(verbose_name='教室ID', max_length=128, primary_key=True, blank=True) #16
-
-3、本地运行出错 /Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo ./start.sh  
-	增加/Users/wuchunlong/local/github/ECUST-CourseInfo/courseinfo/data/__init__.py
-2023.05.19
-```
+	```
+	http://192.168.31.15/    远程机器，通过浏览器访问正常！
+	```
+1. 查看远程机器的工作状态
+	```
+	(env375) wuchunlong@wuchunlong ansible-u1804$ ssh wuchunlong@192.168.31.15
+	查看使用的容器
+	wuchunlong@ubuntu:~$ sudo docker ps
+		CONTAINER ID   IMAGE                        COMMAND              CREATED       STATUS       PORTS                NAMES
+		fa19b6bb377c   chunlongwu/djangodemo:v1.0   "sh /tmp/start.sh"   3 hours ago   Up 3 hours   0.0.0.0:80->80/tcp   49d94d26619fcae7589b5dd97376dbfd714662f043dfc3774c0a1de7721673dd	
+	
+	停止使用的容器
+	wuchunlong@ubuntu:~$ sudo docker stop fa19b6bb377c
+		fa19b6bb377c
+	wuchunlong@ubuntu:~$ sudo docker ps
+		CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+	
+	http://192.168.31.15/    远程机器连接失败！
+	```
+## 更新时间：2023.05.28
+	
+	

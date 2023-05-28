@@ -1,4 +1,4 @@
-FROM maodouzi/django:v2.2.6
+FROM chunlongwu/django:v2.2.6
 
 RUN pip install cx-Oracle \
     && mkdir -p /opt/oracle \
